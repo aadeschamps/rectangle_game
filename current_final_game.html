@@ -5,11 +5,8 @@
       text-align: center;
     }
     canvas {
-    padding-left: 0;
-    padding-right: 0;
     margin-left: auto;
     margin-right: auto;
-    display: block;
     width: 400px;
     }
     h1 {
@@ -58,12 +55,9 @@
   var x = 190;
   var y = 0;
 
-  // intialize the starting x and y of single original block
-  var z = 0;
-  var a = 200;
-
-  // initialize win counter
+  // initialize win  and losses counter
   var win = 0;
+  var losses = 0;
 
   //create array for the height of each line
   var height = [100, 200, 300, 70, 135, 230];
@@ -84,6 +78,7 @@
     ctx.fillRect(0,0, canvas.width, canvas.height);
     ctx.fillStyle = "yellow";
     ctx.fillRect(0, 380, 400, 20);
+
     //make sure player doesn't go off the screen
     if (x > (canvas.width - 20)) {
       x %= canvas.width;
@@ -102,7 +97,8 @@
     }
 
     /*
-    // updates all lines
+    // ** updates all lines: not in use but did not want to lose 
+    // this code just in case I want to use later. **
     for (var i = 0; i < all.length; i++) {
       for (var count = 0; count < all[i].length; count++) {
         if (i%2 === 0){
@@ -176,7 +172,7 @@
           (y+20>=height[i]) && (y+20<=height[i]+20) && (x+20 >= all[i][count]) && (x+20 <= all[i][count]+20) ){
           x=190;
           y=0;
-          win--;
+          losses++;
         }
       };
     };
@@ -185,6 +181,10 @@
     ctx.font = '10pt Calibri';
     var message = "Wins: " + win;
     ctx.fillText(message, 5, 15);
+    ctx.font = '10pt Calibri';
+    var message = "Losses: " + losses;
+    ctx.fillText(message, 320, 15);
+
   }
 
   setInterval(draw, 20);
