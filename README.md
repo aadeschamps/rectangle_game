@@ -1,5 +1,8 @@
 ## My Rectangle Game
 
+##### Inspiration
+* mainly frogger
+
 ##### Want to add:
 * more than 1 level
 * added mechanics:
