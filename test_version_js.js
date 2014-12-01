@@ -6,7 +6,7 @@ var canvas = document.getElementById('the_canvas');
 var ctx = canvas.getContext('2d');
 // Settings:
 var speed = 2;
-var level = 4;
+var level = 1;
 var start_x = 300;
 var start_y = 25;
 var losses = 0;

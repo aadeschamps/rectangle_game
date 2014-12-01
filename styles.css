@@ -15,12 +15,24 @@ canvas {
     color: tan;
 }
 #canvas{
-    background-color: steel;
+    background-color: #202020;
 }
 canvas{
     border: 5px solid DarkSlateGray;
     border-radius: 10px;
 }
+#disclaimer{
+    color: red;
+}
+
 footer{
-    
+
+    text-align: left;
+    background-color: #202020;
+    font-style: italic;
+}
+ul{
+    list-style-type: none;
+}
+
 }
