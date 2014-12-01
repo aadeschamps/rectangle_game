@@ -1,0 +1,26 @@
+body {
+    text-align: center;
+    background-image: url("./bg.png");
+}
+header{
+    border: 5px solid blue;
+    color: SteelBlue;
+}
+canvas {
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+}
+#list{
+    color: tan;
+}
+#canvas{
+    background-color: steel;
+}
+canvas{
+    border: 5px solid DarkSlateGray;
+    border-radius: 10px;
+}
+footer{
+    
+}
