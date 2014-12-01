@@ -25,6 +25,13 @@
     <li> Press enter to restart</li>
 </ul>
 <script>
+/*
+
+    CURRENTLY WORKING ON:
+    nothing
+
+
+*/
   var canvas = document.getElementById('the_canvas');
   var ctx = canvas.getContext('2d');
 
@@ -36,7 +43,7 @@
   var losses = 0;
   var fps = 20;
   var finish_line;
-  var max_level = 3;
+  var max_level = 4;
 
 
   // movement of player box: with boundary detection
@@ -185,7 +192,15 @@
       var square = new Square(line_c[i], height[2], 20, 20, 1, true, true);
       all_obj.push(square);
     };
-    
+
+    // sets finish line square
+    finish_line = new Square(0, 380, 20, 400, 0, true, true);
+  }
+
+  var level_2_const = function(){
+    all_obj = []
+    level_1_const();
+
     // makes static barriers
     var bar1 = new Square(160, 70, 20, 240, 0, true, true);
     all_obj.push(bar1);
@@ -193,12 +208,9 @@
     all_obj.push(bar2);
     var bar3 = new Square(160, 230, 20, 240, 0, true, true);
     all_obj.push(bar3); 
-
-    // sets finish line square
-    finish_line = new Square(0, 380, 20, 400, 0, true, true);
   }
 
-  var level_2_const = function(){
+  var level_3_const = function(){
     all_obj = [];
     //create array for the height of each line
     var height = [100, 200, 300, 70, 135, 230];
@@ -239,9 +251,9 @@
     finish_line = new Square(0, 380, 20, 400, 0, true, true);
   }
 
-  var level_3_const = function(){
+  var level_4_const = function(){
     // creates vertical line squares
-    level_2_const();
+    level_3_const();
     var vert_line = [0, 100, 200, 300];
     var line_speed_vert = 1.5;
     for (var i = 0; i < vert_line.length; i++) {
@@ -308,7 +320,9 @@
       level_2_const();
     } else if(level === 3){
       level_3_const();
-    } else{
+    } else if(level === 4){
+      level_4_const();
+    }else{
       clearInterval(timer);
       win_statement();
     }
