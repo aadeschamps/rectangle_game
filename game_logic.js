@@ -10,7 +10,7 @@ var losses = 0;
 var fps = 20;
 var finish_line;
 var max_level = 4;
-// movement of player box: with boundary detection
+// movement of player box by pushing down keys
 var handleKeyDown = function(evt) {
     if (evt.keyCode === 39) {
         // Right arrow was pressed
@@ -26,6 +26,7 @@ var handleKeyDown = function(evt) {
         player.up = true;
     }
 }
+// shuts off movement when releasing keys
 var handleKeyUp = function(evt) {
     if (evt.keyCode === 39) {
         // Right arrow was pressed
@@ -101,6 +102,8 @@ var Square = function(x_value, y_value, height, width, speed, direction, directi
             }
         }
     }
+    // updates player position based on changes made by
+    // keyboard presses
     this.changePlayer = function() {
         if (this.up) {
             this.y -= this.speed;
@@ -130,19 +133,6 @@ var Square = function(x_value, y_value, height, width, speed, direction, directi
         this.x = start_x;
         this.y = start_y;
     }
-}
-// new stuff
-var Player = function(x_value, y_value, height, width, speed) {
-    this.x = x_value;
-    this.y = y_value;
-    this.height = height;
-    this.width = width;
-    this.speed = speed;
-    this.up = false;
-    this.down = false;
-    this.left = false;
-    this.right = false;
-    // Draws square on canvas
 }
 var all_obj = [];
 // constructs each square needed for level one:
