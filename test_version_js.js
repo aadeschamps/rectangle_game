@@ -1,8 +1,13 @@
 /*
+
+
     Currently working on:
     Bug fix: can clip through second rectangle
 
     soon: adding another level
+
+    adding a boost button (working-needs balance)
+
 
 */
 var canvas = document.getElementById('the_canvas');
@@ -16,6 +21,12 @@ var losses = 0;
 var fps = 20;
 var finish_line;
 var max_level = 4;
+var boost_bonus = 2;
+
+//test
+
+var boost = 100;
+
 // movement of player box by pushing down keys
 var handleKeyDown = function(evt) {
     if (evt.keyCode === 39) {
@@ -30,39 +41,71 @@ var handleKeyDown = function(evt) {
     } else if (evt.keyCode === 38) {
         // up key pressed
         player.up = true;
+    }else if (evt.keyCode === 16){
+        player.boostOn = true;
+    }else if (evt.keyCode === 16){
+        player.boostOn = true;
     }
+    //Developer Tools
+    else if (evt.keyCode === 97){
+        speed+=.2;
+        console.log(speed);
+        console.log(player.speed);
+    }else if (evt.keyCode === 98){
+        speed-=.2;
+        console.log(speed);
+        console.log(player.speed);
+    }else if (evt.keyCode === 101){
+        level+=1;
+        master_const();
+    }else if (evt.keyCode === 100){
+        level-=1;
+        master_const();
+    }
+
 }
 // shuts off movement when releasing keys
 var handleKeyUp = function(evt) {
     if (evt.keyCode === 39) {
-        // Right arrow was pressed
+        // Right arrow was unpressed
         player.right = false;
     } else if (evt.keyCode === 37) {
-        //Left arrow was pressed
+        //Left arrow was un-pressed
         player.left = false;
     } else if (evt.keyCode === 40) {
-        // down key pressed
+        // down key unpressed
         player.down = false;
     } else if (evt.keyCode === 38) {
-        // up key pressed
+        // up key unpressed
         player.up = false;
+    }else if (evt.keyCode === 16){
+        player.boostOn = false;
     }
 }
+
+
 window.addEventListener('keydown', handleKeyDown, true);
 window.addEventListener('keyup', handleKeyUp, true);
+
 // Square constructor that will be used with for all objects
-var Square = function(x_value, y_value, height, width, speed, direction, direction2) {
+var Square = function(x_value, y_value, height, width, ispeed, direction, direction2) {
     this.x = x_value;
     this.y = y_value;
     this.height = height;
     this.width = width;
-    this.speed = speed;
+    this.speed = ispeed;
+
+    //obstacle controllers
     this.positive = direction;
     this.direction = direction2;
+
+    //player controllers
     this.up = false;
     this.down = false;
     this.left = false;
     this.right = false;
+    this.boost = boost;
+    this.boostOn = false;
     // Draws square on canvas
     this.draw = function() {
         ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -84,19 +127,19 @@ var Square = function(x_value, y_value, height, width, speed, direction, directi
     this.change = function() {
         if (this.direction) {
             if (this.positive) {
-                this.x += speed;
+                this.x += this.speed;
                 if (this.x >= canvas.width) {
                     this.x = 0;
                 }
             } else {
-                this.x -= speed;
+                this.x -= this.speed;
                 if (this.x <= -20) {
                     this.x = canvas.width;
                 }
             }
         } else {
             if (this.positive) {
-                this.y += speed;
+                this.y += this.speed;
                 if (this.y >= canvas.height) {
                     this.y = 0;
                 }
@@ -111,6 +154,15 @@ var Square = function(x_value, y_value, height, width, speed, direction, directi
     // updates player position based on changes made by
     // keyboard presses
     this.changePlayer = function() {
+        this.speed = speed;
+        if (this.boostOn){
+            if(this.boost > 0){
+                this.speed = speed + boost_bonus;
+                this.boost--;
+            }
+        }else{
+            this.speed = speed;
+        }
         if (this.up) {
             this.y -= this.speed;
             if(this.y <= 0){
@@ -138,11 +190,13 @@ var Square = function(x_value, y_value, height, width, speed, direction, directi
     this.reset = function() {
         this.x = start_x;
         this.y = start_y;
+        this.boost = boost;
     }
 }
 var all_obj = [];
 // constructs each square needed for level one:
 var level_1_const = function() {
+    all_obj = [];
     //create array for the height of each line
     var height = [100, 200, 300, 70, 135, 230];
     // create array for the x value of each block in each line
@@ -225,6 +279,52 @@ var level_4_const = function() {
     };
     finish_line = new Square(240, 380, 20, 200);
 }
+
+var level_5_const = function() {
+    // level 3 with modifications to 
+    all_obj = [];
+    level_3_const();
+    // changes the middle line to reverse direction and 
+    // reduce speed to 2
+    all_obj.forEach(function(elem){
+        if (elem.speed === 3){
+            elem.speed = 2;
+            elem.positive = true;
+        } else if (elem.speed ===2){
+            elem.speed = 3;
+        }
+    });
+
+    // adds another line above middle line
+    var line_speed = 2;
+    var line_b = [50, 150, 250, 350];
+    for (var i = 0; i < line_b.length; i++) {
+        var square = new Square(line_b[i], 180, 20, 20, line_speed, false, true);
+        all_obj.push(square)
+    };
+
+    // adds bar on same line as lower bar
+    var bar3 = new Square(0, 230, 20, 120, 0, true, true);
+    all_obj.push(bar3);
+}
+
+var level_6_const = function(){
+    level_5_const();
+    var vert_line = [0, 100, 200, 300];
+    var line_speed_vert = 1.5;
+    for (var i = 0; i < vert_line.length; i++) {
+        var square = new Square(200, vert_line[i], 20, 20, line_speed_vert, true, false);
+        all_obj.push(square);
+    };
+    finish_line = new Square(240, 380, 20, 200);
+}
+
+var level_7_const = function(){
+    level_6_const();
+    var bar2 = new Square(0, 155, 20, 240, 0, true, true);
+    all_obj.push(bar2);
+}
+
 // called every "fps" milliseconds, updates location of boxes
 // and tests for collision: losses and win collisions
 var level_func = function() {
@@ -253,6 +353,8 @@ var level_func = function() {
     ctx.font = '10pt Calibri';
     var message = "Losses: " + losses;
     ctx.fillText(message, 320, 15);
+    var message = "Boost: " + player.boost;
+    ctx.fillText(message, 170, 15);
     // checks if player collides with finish line and updates
     // level and calls the next level constructor
     if (finish_line.collision(player)) {
@@ -282,7 +384,13 @@ var master_const = function() {
         level_3_const();
     } else if (level === 4) {
         level_4_const();
-    } else {
+    } else if (level === 5){
+        level_5_const();
+    } else if (level === 6){
+        level_6_const();
+    } else if (level === 7){
+        level_7_const();
+    }else {
         clearInterval(timer);
         win_statement();
     }
