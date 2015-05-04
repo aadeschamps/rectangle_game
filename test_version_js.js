@@ -106,92 +106,93 @@ var Square = function(x_value, y_value, height, width, ispeed, direction, direct
     this.right = false;
     this.boost = boost;
     this.boostOn = false;
-    // Draws square on canvas
-    this.draw = function() {
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+}
+
+// Draws square on canvas
+Square.prototype.draw = function() {
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+}
+// returns true if whatever square object that is put into
+// the function collides with this square
+Square.prototype.collision = function(player) {
+    if (((player.x >= this.x) && (player.x <= this.x + this.width) && (player.y >= this.y) && (player.y <= this.y + this.height)) //top left corner
+        || ((player.x + player.width >= this.x) && (player.x + player.width <= this.x + this.width) && (player.y >= this.y) && (player.y <= this.y + this.height)) // top right corner
+        || ((player.x + player.width >= this.x) && (player.x + player.width <= this.x + this.width) && (player.y + player.height >= this.y) && (player.y + player.height <= this.y + this.height)) || // bottom right corner
+        ((player.x >= this.x) && (player.x <= this.x + this.height) && // bottom left corner
+            (player.y + player.height >= this.y) && (player.y + player.height <= this.y + this.height))) {
+        return true;
+    } else {
+        return false;
     }
-    // returns true if whatever square object that is put into
-    // the function collides with this square
-    this.collision = function(player) {
-        if (((player.x >= this.x) && (player.x <= this.x + this.width) && (player.y >= this.y) && (player.y <= this.y + this.height)) //top left corner
-            || ((player.x + player.width >= this.x) && (player.x + player.width <= this.x + this.width) && (player.y >= this.y) && (player.y <= this.y + this.height)) // top right corner
-            || ((player.x + player.width >= this.x) && (player.x + player.width <= this.x + this.width) && (player.y + player.height >= this.y) && (player.y + player.height <= this.y + this.height)) || // bottom right corner
-            ((player.x >= this.x) && (player.x <= this.x + this.height) && // bottom left corner
-                (player.y + player.height >= this.y) && (player.y + player.height <= this.y + this.height))) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-    // changes the location of box depending on intial settings of box when made. Direction controls vertical vs horiontal and positive controls direction within above.
-    this.change = function() {
-        if (this.direction) {
-            if (this.positive) {
-                this.x += this.speed;
-                if (this.x >= canvas.width) {
-                    this.x = 0;
-                }
-            } else {
-                this.x -= this.speed;
-                if (this.x <= -20) {
-                    this.x = canvas.width;
-                }
-            }
-        } else {
-            if (this.positive) {
-                this.y += this.speed;
-                if (this.y >= canvas.height) {
-                    this.y = 0;
-                }
-            } else {
-                this.y -= speed;
-                if (this.y <= -20) {
-                    this.y = canvas.height;
-                }
-            }
-        }
-    }
-    // updates player position based on changes made by
-    // keyboard presses
-    this.changePlayer = function() {
-        this.speed = speed;
-        if (this.boostOn){
-            if(this.boost > 0){
-                this.speed = speed + boost_bonus;
-                this.boost--;
-            }
-        }else{
-            this.speed = speed;
-        }
-        if (this.up) {
-            this.y -= this.speed;
-            if(this.y <= 0){
-                this.y = 0;
-            }
-        } else if (this.down) {
-            this.y += this.speed;
-            if(this.y >= (canvas.height - 20) ){
-                this.y = canvas.height - 20;
-            }
-        }
-        if (this.left) {
-            this.x -= this.speed;
-            if (this.x <= 0){
+}
+// changes the location of box depending on intial settings of box when made. Direction controls vertical vs horiontal and positive controls direction within above.
+Square.prototype.change = function() {
+    if (this.direction) {
+        if (this.positive) {
+            this.x += this.speed;
+            if (this.x >= canvas.width) {
                 this.x = 0;
             }
-        } else if (this.right) {
-            this.x += this.speed;
-            if (this.x >= canvas.width - 20){
-                this.x = canvas.width - 20;
+        } else {
+            this.x -= this.speed;
+            if (this.x <= -20) {
+                this.x = canvas.width;
+            }
+        }
+    } else {
+        if (this.positive) {
+            this.y += this.speed;
+            if (this.y >= canvas.height) {
+                this.y = 0;
+            }
+        } else {
+            this.y -= speed;
+            if (this.y <= -20) {
+                this.y = canvas.height;
             }
         }
     }
-    // resets position to starting, only used for player square
-    this.reset = function() {
-        this.x = start_x;
-        this.y = start_y;
-        this.boost = boost;
+}
+    // updates player position based on changes made by
+    // keyboard presses
+Square.prototype.changePlayer = function() {
+    this.speed = speed;
+    if (this.boostOn){
+        if(this.boost > 0){
+            this.speed = speed + boost_bonus;
+            this.boost--;
+        }
+    }else{
+        this.speed = speed;
     }
+    if (this.up) {
+        this.y -= this.speed;
+        if(this.y <= 0){
+            this.y = 0;
+        }
+    } else if (this.down) {
+        this.y += this.speed;
+        if(this.y >= (canvas.height - 20) ){
+            this.y = canvas.height - 20;
+        }
+    }
+    if (this.left) {
+        this.x -= this.speed;
+        if (this.x <= 0){
+            this.x = 0;
+        }
+    } else if (this.right) {
+        this.x += this.speed;
+        if (this.x >= canvas.width - 20){
+            this.x = canvas.width - 20;
+        }
+    }
+}
+    // resets position to starting, only used for player square
+Square.prototype.reset = function() {
+    this.x = start_x;
+    this.y = start_y;
+    this.boost = boost;
 }
 var all_obj = [];
 // constructs each square needed for level one:
